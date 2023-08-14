@@ -1,0 +1,12 @@
+{
+    "name": "node-red-matuschek-mqtt-sql",
+    "description": "node-red flow transfer data from time controller matuschek to sql via mqtt",
+    "version": "0.0.1",
+    "dependencies": {},
+    "node-red": {
+        "settings": {
+            "flowFile": "flow.json",
+            "credentialsFile": "flow_cred.json"
+        }
+    }
+}
