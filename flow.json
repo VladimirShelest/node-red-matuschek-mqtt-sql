@@ -1,1 +1,392 @@
-[]
+[
+    {
+        "id": "cf0d471fe8e63a08",
+        "type": "tab",
+        "label": "Matuschek",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5984263498fb979d",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "10.18.40.102",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "1",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "df8c0b88.91b0a8",
+        "type": "MSSQL-CN",
+        "name": "MQTT",
+        "server": "SPBMQTT",
+        "encyption": false,
+        "database": ""
+    },
+    {
+        "id": "2d836a47e52b3026",
+        "type": "mqtt in",
+        "z": "cf0d471fe8e63a08",
+        "name": "",
+        "topic": " m/spb/kam/assembly/17901200/spw",
+        "qos": "1",
+        "datatype": "buffer",
+        "broker": "5984263498fb979d",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 240,
+        "y": 100,
+        "wires": [
+            [
+                "13f653532026c57b"
+            ]
+        ]
+    },
+    {
+        "id": "fd3310ca37e9aa7e",
+        "type": "debug",
+        "z": "cf0d471fe8e63a08",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "858bbf80ef1a7557",
+        "type": "function",
+        "z": "cf0d471fe8e63a08",
+        "name": "Function",
+        "func": "// @ts-nocheck\n\ndformat = [msg.payload.DateM,\n    msg.payload.DateD,\n    msg.payload.DateY - 20].join('/')+' '+\n[msg.payload.TimeH,\n    msg.payload.TimeM,\n    msg.payload.TimeS,\n    msg.payload.TimeMs].join(':');\n\npld =       \"INSERT INTO [Matuschek].[dbo].[Matuschek_Weld_Data] \"\npld = pld + \"(TimerName, BDK, PartID, DateTime, BackupCounter, GunNumber, SpotTypeID, SpotNumber, SpotCounter, DressCounter, ProgramNumber, WeldTime, [Current], Voltage, ResistanceEnd, TriggerangleEnd, Force, Energy, NuggetIndex, DeviationWeldTime, DeviationCurrent) \"\npld = pld + \"VALUES ('\" + msg.payload.TimerName + \"', '\" + msg.payload.BDK + \"', '\" + msg.payload.PartID + \"', '\" + dformat + \"', '\" + msg.payload.BackupC + \"', '\" + msg.payload.GunN + \"', '\" + msg.payload.TypeID + \"', '\" + msg.payload.SpotN + \"', '\" + msg.payload.SpotC + \"', '\" + msg.payload.DressC + \"', '\" + msg.payload.ProgramN + \"', '\" + msg.payload.WeldTime + \"', '\" + msg.payload.Current + \"', '\" + msg.payload.Voltage + \"', '\" + msg.payload.ResEnd + \"', '\" + msg.payload.TrigEnd + \"', '\" + msg.payload.Force + \"', '\" + msg.payload.Energy + \"', '\" + msg.payload.NugI + \"', '\" + msg.payload.DevWT + \"', '\" + msg.payload.DevCur + \"')\"\n\n\nmsg.payload = pld\nreturn msg;\n\n\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 100,
+        "wires": [
+            [
+                "274ea66467e8e12c"
+            ]
+        ]
+    },
+    {
+        "id": "13f653532026c57b",
+        "type": "buffer-parser",
+        "z": "cf0d471fe8e63a08",
+        "name": "MQTT Matuschek QS-Data",
+        "data": "payload",
+        "dataType": "msg",
+        "specification": "spec",
+        "specificationType": "ui",
+        "items": [
+            {
+                "type": "ascii",
+                "name": "TimerName",
+                "offset": 8,
+                "length": 76,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "ascii",
+                "name": "BDK",
+                "offset": 84,
+                "length": 24,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "ascii",
+                "name": "PartID",
+                "offset": 108,
+                "length": 28,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint16be",
+                "name": "TimeMs",
+                "offset": 136,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "TimeS",
+                "offset": 138,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "TimeM",
+                "offset": 139,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "TimeH",
+                "offset": 140,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "DateD",
+                "offset": 141,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "DateM",
+                "offset": 142,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint8",
+                "name": "DateY",
+                "offset": 143,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint32be",
+                "name": "BackupC",
+                "offset": 144,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint32be",
+                "name": "GunN",
+                "offset": 148,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint32be",
+                "name": "TypeID",
+                "offset": 152,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint32be",
+                "name": "SpotN",
+                "offset": 156,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint32be",
+                "name": "SpotC",
+                "offset": 160,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "uint32be",
+                "name": "DressC",
+                "offset": 164,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "int32be",
+                "name": "ProgramN",
+                "offset": 168,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "WeldTime",
+                "offset": 172,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "Current",
+                "offset": 176,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "Voltage",
+                "offset": 180,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "ResEnd",
+                "offset": 184,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "TrigEnd",
+                "offset": 188,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "Force",
+                "offset": 192,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "Energy",
+                "offset": 196,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "NugI",
+                "offset": 200,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "DevWT",
+                "offset": 204,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "floatbe",
+                "name": "DevCur",
+                "offset": 208,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            }
+        ],
+        "swap1": "",
+        "swap2": "",
+        "swap3": "",
+        "swap1Type": "swap",
+        "swap2Type": "swap",
+        "swap3Type": "swap",
+        "msgProperty": "payload",
+        "msgPropertyType": "str",
+        "resultType": "keyvalue",
+        "resultTypeType": "return",
+        "multipleResult": false,
+        "fanOutMultipleResult": false,
+        "setTopic": false,
+        "outputs": 1,
+        "x": 540,
+        "y": 100,
+        "wires": [
+            [
+                "858bbf80ef1a7557",
+                "fd3310ca37e9aa7e"
+            ]
+        ]
+    },
+    {
+        "id": "274ea66467e8e12c",
+        "type": "MSSQL",
+        "z": "cf0d471fe8e63a08",
+        "mssqlCN": "df8c0b88.91b0a8",
+        "name": "MSSQL",
+        "query": "",
+        "outField": "payload",
+        "x": 1040,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    }
+]
