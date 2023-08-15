@@ -3,7 +3,8 @@
     "description": "node-red flow transfer data from time controller matuschek to sql via mqtt",
     "version": "0.0.1",
     "dependencies": {
-        "node-red-contrib-buffer-parser": "3.2.2"
+        "node-red-contrib-buffer-parser": "3.2.2",
+        "node-red-contrib-mssql": "0.0.7"
     },
     "node-red": {
         "settings": {
